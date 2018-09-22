@@ -71,3 +71,8 @@ Essentially, this is a multiply-linked list of promises which cascade upon resol
 Just think of a digital-quantum-waveform collapsing into a known value.
 
 Honestly I don't know how to explain it better than that... just look at the code.
+
+## TODO
+- Testing
+- Wrangling this into a proper package
+- NPM FTW!
