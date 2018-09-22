@@ -79,3 +79,4 @@ Honestly I don't know how to explain it better than that... just look at the cod
 
 ## Author
 Jeremy Rumble
+http://medium.com/@jmrumble
