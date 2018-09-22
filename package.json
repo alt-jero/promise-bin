@@ -4,7 +4,8 @@
   "description": "",
   "main": "PromiseBin.js",
   "scripts": {
-    "test": "nyc --reporter=text-summary --reporter=html mocha --file test/configuration.js --reporter=nyan --recursive './**/*.spec.js' "
+    "test": "nyc --reporter=text-summary --reporter=html mocha --file test/configuration.js --recursive './**/*.spec.js' ",
+    "test:nocoverage": "mocha --file test/configuration.js --recursive './**/*.spec.js'"
   },
   "repository": {
     "type": "git",

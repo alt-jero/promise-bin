@@ -12,23 +12,32 @@ const nop = ()=>{}
 class PromiseBin {
     /**
      * PromiseBin Constructor
-     * @param {Function} fulfillmentsHandler Last-in-line fulfillment handler
-     * @param {Function} rejectionsHandler Last-in-line rejection handler
+     * The handlers passed to this function are permanent. Those retrieved
+     * via the methods on this class are single-use.
+     * @param {object} opts
+     * @param {function} opts.fulfillmentsHandler Last-in-line fulfillment handler
+     * @param {function} opts.rejectionsHandler Last-in-line rejection handler
+     * @param {function} opts.nextChangeHandler Last-in-line nextChange handler
+     * @param {function} opts.zeroPendingHandler Last-in-line zeroPending handler
      */
-    constructor(fulfillmentsHandler = nop, rejectionsHandler = nop) {
-        this._pending = 0
+    constructor({
+        fulfillmentsHandler = nop,
+        rejectionsHandler = nop,
+        nextChangeHandler = nop,
+        zeroPendingHandler = nop,
+        } = {}) {
 
+        // Promise stats
+        this._pending = 0
         this._rejected = 0
         this._fulfilled = 0
-
         this._total = 0
 
         // Handlers
-        this.fulfillmentsHandler = fulfillmentsHandler ? fulfillmentsHandler : nop
-        this.rejectionsHandler = rejectionsHandler ? rejectionsHandler : nop
-
-        this.nextChangeHandler = nop
-        this.zeroPending = nop
+        this.fulfillmentsHandler = fulfillmentsHandler
+        this.rejectionsHandler = rejectionsHandler
+        this.nextChangeHandler = nextChangeHandler
+        this.zeroPendingHandler = zeroPendingHandler
     }
 
     /**
@@ -45,16 +54,16 @@ class PromiseBin {
     }
 
     /** Get number of pending propmises in bin */
-    get pending() { return this.pending }
+    get pending() { return this._pending }
     
     /** Get number of rejected promises in bin */
-    get rejected() { return this.rejected }
+    get rejected() { return this._rejected }
     
     /** Get number of fulfilled promises in bin */
-    get fulfilled() { return this.fulfilled }
+    get fulfilled() { return this._fulfilled }
 
     /** Get total number of promises in bin */
-    get total() { return this.total }
+    get total() { return this._total }
 
     /**
      * Add a Promise to the list of pending promises
@@ -86,12 +95,10 @@ class PromiseBin {
 
         // If we've gotten through all the promises then
         // notify any listeners that that is the case
-        if(this._pending === 0) this.zeroPending()
+        if(this._pending === 0) this.zeroPendingHandler()
 
         // And notify that we've had a change in status
         this.nextChangeHandler()
-
-        // Et Voila!
     }
 
     /**
@@ -147,19 +154,19 @@ class PromiseBin {
      */
     async nextFulfillment() {
         // Nothing else to fulfill?
-        if(this._pending < 1) return true;
+        if(this._pending < 1) return true; // A resolved promise
 
         // Borrow the handler...
         let fulfillment = this.fulfillmentsHandler
         // And use a promise...
         return new Promise(function(yay,nay) {
-            // To insert one of ours.
+            // To insert one of ours. (a fulfillment handler)
             this.fulfillmentsHandler = yay
-            // And when we hear back...
+            // And when we hear back... (upon next fulfillment)
         }.bind(this)).then(function(info){
-            // Remember to replace it...
+            // Remember to replace it... (the original handler)
             this.fulfillmentsHandler = fulfillment
-            // And pass on what we've learned.
+            // And pass on what we've learned. (to the next handler)
             return this.fulfillmentsHandler(info)
         }.bind(this))
     }
@@ -171,7 +178,7 @@ class PromiseBin {
      */
     async nextRejection() {
         // Nothing else to fulfill?
-        if(this._pending < 1) return true;
+        if(this._pending < 1) return true; // A resolved promise
 
         // Borrow the handler...
         let borrowedHandler = this.rejectionsHandler
