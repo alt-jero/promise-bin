@@ -1,0 +1,24 @@
+{
+  "name": "promise-bin",
+  "version": "0.0.0",
+  "description": "",
+  "main": "PromiseBin.js",
+  "scripts": {
+    "test": "nyc --reporter=text-summary --reporter=html mocha --file test/configuration.js --reporter=nyan --recursive './**/*.spec.js' "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alt-jero/promise-bin.git"
+  },
+  "author": "alt-jero <jero.rumble@gmail.com>",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/alt-jero/promise-bin/issues"
+  },
+  "homepage": "https://github.com/alt-jero/promise-bin#readme",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "nyc": "^13.0.1"
+  }
+}
