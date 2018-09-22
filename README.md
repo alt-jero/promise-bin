@@ -25,7 +25,7 @@ Want to know how many promises are still pending?
 We've got your stats.
 
 ## Installing
-`npm -i promise-bin`
+`npm i promise-bin`
 
 ## Usage
 ```
