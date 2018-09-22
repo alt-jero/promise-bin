@@ -24,6 +24,9 @@ Done.
 Want to know how many promises are still pending?
 We've got your stats.
 
+## Installing
+`npm -i promise-bin`
+
 ## Usage
 ```
 // Instantiate PromiseBin with fulfill and reject handlers
