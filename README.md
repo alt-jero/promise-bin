@@ -76,3 +76,6 @@ Honestly I don't know how to explain it better than that... just look at the cod
 - Testing
 - Wrangling this into a proper package
 - NPM FTW!
+
+## Author
+Jeremy Rumble
