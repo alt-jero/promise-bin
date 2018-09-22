@@ -28,7 +28,9 @@ We've got your stats.
 `npm i promise-bin`
 
 ## Usage
-```
+```Javascript
+const PromiseBin = require('promise-bin')
+
 // Instantiate PromiseBin with fulfill and reject handlers
 const bin = new PromiseBin(onFulfill, onReject)
 
