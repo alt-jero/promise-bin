@@ -3,3 +3,6 @@ node_modules
 .nyc_output
 package-lock.json
 .DS_Store
+.npmrc
+*.spec.js
+test
