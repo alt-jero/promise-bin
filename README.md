@@ -77,10 +77,13 @@ Just think of a digital-quantum-waveform collapsing into a known value.
 
 Honestly I don't know how to explain it better than that... just look at the code.
 
-## TODO
-- Testing
-- Wrangling this into a proper package
-- NPM FTW!
+## Note
+I've discovered a potential flaw... I'll leave it up to you to figure out what to do with pending notification promises. For example: you have a promise which will fulfill on the next rejection, yet the promiseBin reaches zero without a single rejection... leaving your handler hanging.
+
+Possibilities:
+- Fake a rejection using `null` as the error... but what about the reverse, if there is not a single fulfillment? (Because `null`, while an unlikely value to hrow as an error, is a perfectly valid return value.)
+- Wire the notification promises to return an object including a status as well as the return or error value so as to indicate whether it was triggered as a notification of the event requested, or to clear out the promise bin.
+- Just leave them be... If you use the bin again they'll still be there and if you chuck it, they should get garbage-collected and simply not run whatever "then" code you've assigned, or whatever code comes after your "await".
 
 ## Author
 Jeremy Rumble
