@@ -129,9 +129,6 @@ class PromiseBin {
      * @returns {Promise} The onNextChange Promise
      */
     async nextChange() {
-        // Already?
-        if(this._pending < 1) return true;
-        
         // Borrow the handler...
         let nextChangeHandler = this.nextChangeHandler
         // And use a promise...
@@ -153,9 +150,6 @@ class PromiseBin {
      * @returns {Promise} The onNextFulfillment Promise
      */
     async nextFulfillment() {
-        // Nothing else to fulfill?
-        if(this._pending < 1) return true; // A resolved promise
-
         // Borrow the handler...
         let fulfillment = this.fulfillmentsHandler
         // And use a promise...
@@ -177,9 +171,6 @@ class PromiseBin {
      * @returns {Promise} The onNextRejection Promise
      */
     async nextRejection() {
-        // Nothing else to fulfill?
-        if(this._pending < 1) return true; // A resolved promise
-
         // Borrow the handler...
         let borrowedHandler = this.rejectionsHandler
 
@@ -203,17 +194,17 @@ class PromiseBin {
         if(this._pending < 1) return true;
         
         // Borrow the handler...
-        let zeroPending = this.zeroPending;
+        let zeroPendingHandler = this.zeroPendingHandler;
         // And use a promise...
         return new Promise(function(resolve){
             // To hook in to the communique...
-            this.zeroPending = resolve
+            this.zeroPendingHandler = resolve
             // And when we hear back...
         }.bind(this)).then(function(){
             // Remove the splice...
-            this.zeroPending = zeroPending
+            this.zeroPendingHandler = zeroPendingHandler
             // And send something nice!
-            this.zeroPending()
+            return this.zeroPendingHandler()
         }.bind(this))
     }
 }
