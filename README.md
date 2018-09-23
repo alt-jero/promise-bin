@@ -11,8 +11,9 @@ resolving so that I could update a status line in the console.
 
 ## What is it?
 Rather than creating an array or chain of promises, or using 
-`Promise.all()`, wouldn't it be cool if promises could just
-keep track of themselves?
+`Promise.all()` or `Promise.race()`, wouldn't it be cool if
+promises could just keep track of themselves and let you know
+when they have something for you?
 
 PromiseBin is basically a bucket. Chuck your promises in there
 and leave them be. Register a success handler and an error handler
@@ -26,6 +27,12 @@ We've got your stats.
 
 ## Installing
 `npm i promise-bin`
+
+## Testing
+`npm t` Will run full unit-tests + coverage.
+Coverage report in: `./coverage/` as HTML.
+
+You can also use `npm run test:nocoverage` for just the tests.
 
 ## Usage
 ```Javascript
@@ -45,12 +52,12 @@ const nextToFulfill = await bin.nextFulfillment()
 // Get the error of the next promise to be rejected
 const nextToReject = await bin.nextRejection()
 
-// This will wait for the next promise to
+// This will just wait for the next promise to
 // either fulfill or reject before proceeding
 await bin.nextChange()
 
 // This will wait until all of the promises have resolved
-// before proceeding.
+// before proceeding. (Or proceed if there are zero pending.)
 await bin.noMorePending()
 
 // Also you can get stats at any time
